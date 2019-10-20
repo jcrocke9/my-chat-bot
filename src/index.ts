@@ -26,9 +26,15 @@ server.listen(process.env.port || process.env.PORT || 3978, () => {
 // Create adapter.
 // See https://aka.ms/about-bot-adapter to learn more about adapters.
 const adapter = new BotFrameworkAdapter({
-    appId: process.env.MicrosoftAppID,
-    appPassword: process.env.MicrosoftAppPassword
+    appId: "f2998d50-d724-4a48-9b37-dc9e29ee1c8c", //process.env.MicrosoftAppID,
+    appPassword: "doormen-fond-vasser1" //process.env.MicrosoftAppPassword
 });
+// Map knowledge base endpoint values from .env file into the required format for `QnAMaker`.
+const configuration = {
+    knowledgeBaseId: "4db22f8b-3ef2-465c-8817-2526dceaba02",// process.env.QnAKnowledgebaseId,
+    endpointKey: "5dd7f00f-ceb7-404f-be04-faf443a7e656", //process.env.QnAAuthKey,
+    host: "https://statetreeanswer.azurewebsites.net/qnamaker" //process.env.QnAEndpointHostName
+ };
 
 // Catch-all for errors.
 adapter.onTurnError = async (context, error) => {
@@ -39,7 +45,7 @@ adapter.onTurnError = async (context, error) => {
 };
 
 // Create the main dialog.
-const myBot = new MyBot();
+const myBot = new MyBot(configuration, {});
 
 // Listen for incoming requests.
 server.post('/api/messages', (req, res) => {
